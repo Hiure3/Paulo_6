@@ -1,0 +1,29 @@
+# SmartComanda PRO - Sistema de Comandas e Cozinha (KDS)
+
+Como executar no Windows:
+1. Extraia todos os arquivos do ZIP para uma pasta.
+2. Dê um duplo clique em `sistema_comanda.html` (use Google Chrome ou Microsoft Edge).
+3. Funciona SEM internet: não depende de nenhum site ou biblioteca externa.
+
+Planilha Excel em tempo real:
+- Clique em "Conectar planilha" (topo da tela) e escolha onde salvar `SmartComanda.xlsx`.
+- A cada alteração o arquivo é regravado (abas: Pedidos, Itens, Mesas, Fechamentos).
+- Enquanto o arquivo estiver ABERTO no Excel, o Windows o bloqueia: o sistema avisa
+  "Planilha em uso" e grava assim que o arquivo for fechado. Para acompanhar ao vivo,
+  crie outra pasta de trabalho no Excel em Dados > Obter Dados > De Pasta de Trabalho,
+  aponte para SmartComanda.xlsx e configure "Atualizar a cada 1 minuto".
+- Depois de reabrir o sistema, se aparecer "Reconectar planilha", clique uma vez.
+- Em outros navegadores use Configurações > "Baixar planilha agora".
+
+Cronômetro:
+- Ao tocar em "Enviar para a cozinha" nasce um pedido e o tempo começa a contar.
+- Verde até metade do limite, amarelo até o limite, vermelho piscando e alarme depois dele
+  (limite padrão: 15 min, ajustável em Configurações).
+
+Áudio (Configurações para ligar/desligar, volume e voz):
+- Pedido enviado, preparo iniciado, pedido pronto (com aviso falado), pedido atrasado,
+  conta fechada, produto adicionado e erros. Clique uma vez na tela para liberar o som.
+
+Dados: salvos automaticamente neste computador (funcionam offline). Use
+Configurações > Backup (JSON) com frequência. Duas abas abertas no mesmo
+computador (Salão e Cozinha) se sincronizam sozinhas.

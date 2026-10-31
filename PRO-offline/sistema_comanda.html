@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmartComanda PRO</title>
+<style>
+*{box-sizing:border-box;margin:0}
+:root{--bg:#0f172a;--p:#1e293b;--b:#334155;--t:#e2e8f0;--m:#94a3b8;--g:#10b981;--a:#f59e0b;--bl:#3b82f6;--i:#6366f1;--r:#ef4444}
+body{font:14px/1.4 system-ui,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--t);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+[hidden]{display:none!important}
+button,.btn{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:10px;padding:8px 14px;background:var(--b);color:#fff;display:inline-block}
+button:hover,.btn:hover{filter:brightness(1.15)}
+:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.g{background:var(--g);color:#04281e}.bl{background:var(--bl)}.ic{padding:6px 10px;background:transparent;font-size:16px}
+small{color:var(--m);display:block}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 18px;background:var(--p);border-bottom:1px solid var(--b);flex-wrap:wrap}
+.brand{display:flex;gap:10px;align-items:center}.logo{background:var(--g);border-radius:10px;width:38px;height:38px;display:grid;place-items:center;font-size:20px}
+h1{font-size:17px}h1 small{display:inline;background:#10b9811a;color:var(--g);border:1px solid #10b98133;padding:1px 8px;border-radius:99px;margin-left:6px;font-size:11px}
+nav{display:flex;gap:4px;background:var(--bg);padding:4px;border-radius:12px;border:1px solid var(--b)}
+.tab{background:transparent;color:var(--m);position:relative}.tab.on{color:#fff}.tab.on.salao{background:#059669}.tab.on.kitchen{background:#d97706}.tab.on.menu{background:#4f46e5}
+.bdg{position:absolute;top:-6px;right:-6px;background:var(--r);border-radius:99px;min-width:20px;height:20px;font:700 11px/20px system-ui;text-align:center;font-style:normal}
+#hr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.turn{color:var(--m)}.turn b{color:var(--g)}
+.chip{background:var(--bg);border:1px solid var(--b);color:var(--t);padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.chip.ok{color:var(--g);border-color:#10b98155}.chip.wn{color:var(--a);border-color:#f59e0b55}.chip.bl{color:#60a5fa;border-color:#3b82f655;background:var(--bg)}
+main{flex:1;overflow:hidden;position:relative}
+section{height:100%;padding:18px;overflow-y:auto}
+#v-salao{display:flex;gap:18px}#mesas{flex:1}
+#painel{width:360px;background:var(--p);border:1px solid var(--b);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-self:flex-start;min-height:60%;max-height:100%}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}h2{font-size:18px}
+.lg{display:flex;gap:12px;color:var(--m);font-size:12px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.mesa{display:flex;flex-direction:column;gap:4px;text-align:left;padding:14px;border-radius:14px;background:#1e293b66;border:1px solid var(--b);font-weight:400}
+.mesa b{font-size:16px}.mesa span{color:var(--m)}.mesa strong{color:var(--g);margin-top:4px}.mesa .tm{align-self:flex-start}
+.mesa.livre:hover{border-color:#10b98199}.mesa.ocu{border-color:#f59e0b88;background:var(--p)}.mesa.coz{border-color:#6366f1;background:var(--p)}.mesa.sel{box-shadow:0 0 0 2px var(--g)}
+.tm{font-variant-numeric:tabular-nums;padding:2px 8px;border-radius:8px;font-size:13px;background:#10b9811f;color:var(--g)}
+.tm.wn{background:#f59e0b24;color:var(--a)}.tm.bad{background:#ef44442e;color:#fca5a5;animation:pl 1s infinite}
+@keyframes pl{50%{opacity:.55}}@media(prefers-reduced-motion:reduce){.tm.bad{animation:none}}
+.ph{display:flex;justify-content:space-between;align-items:start;padding-bottom:12px;border-bottom:1px solid var(--b)}.ph small{color:var(--g)}
+.its{flex:1;overflow-y:auto;padding:12px 0;display:grid;gap:8px;align-content:start}
+.it{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#0f172a99;border:1px solid #33415599;border-radius:12px;padding:10px}
+.r{text-align:right;display:grid;gap:3px;justify-items:end}.r .chip{font-size:11px;padding:1px 8px}.x{background:none;color:var(--m);padding:0 4px}
+.ft{border-top:1px solid var(--b);padding-top:12px;display:grid;gap:8px}.tt{display:flex;justify-content:space-between;font-weight:700;font-size:16px}.tt span:last-child{color:var(--g)}
+.empty{margin:auto;text-align:center;color:var(--m);padding:40px}
+#v-kitchen{background:#020617}.kg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.k{background:var(--bg);border:1px solid #1e293b;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+.k .bar{position:absolute;inset:0 0 auto;height:5px;background:var(--a)}.k .bar.e{background:var(--bl)}.k .bar.p{background:var(--g)}
+.k.done{opacity:.6}.kt{display:flex;justify-content:space-between;align-items:center}.mt{background:var(--p);border:1px solid var(--b);padding:2px 10px;border-radius:8px}
+.k .tm{font-size:20px;font-weight:700}.k ul{list-style:none;border-top:1px solid #1e293b;padding-top:8px;margin:6px 0;display:grid;gap:4px;font-weight:600;flex:1}
+.fin{text-align:center;color:var(--g);font-weight:700}
+.seg{display:flex;gap:4px;background:var(--p);padding:4px;border-radius:12px;border:1px solid var(--b)}.seg button{background:transparent;color:var(--m);padding:6px 12px}.seg .on{background:#4f46e5;color:#fff}
+.pc{background:var(--p);border:1px solid var(--b);border-radius:14px;padding:14px;display:grid;gap:6px}.r2{display:flex;justify-content:space-between;align-items:center}.pr{color:var(--g);font-size:16px}
+dialog{background:var(--p);color:var(--t);border:1px solid var(--b);border-radius:16px;padding:20px;width:min(560px,92vw);margin:auto}
+dialog::backdrop{background:#020617bb}dialog h3{margin-bottom:12px}
+label{display:grid;gap:4px;margin-bottom:12px;color:var(--m);font-size:12px}
+input[type=text],input[type=number],input:not([type]){background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:9px 12px;color:#fff;font:inherit}
+.ck{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--t)}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}.row.w{flex-wrap:wrap;justify-content:flex-start}
+#pL{display:grid;gap:8px;max-height:55vh;overflow-y:auto}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#f1f5f9;color:#0f172a;padding:10px 18px;border-radius:12px;font-weight:600;z-index:99;display:none}
+@media(max-width:900px){#v-salao{flex-direction:column}#painel{width:auto;align-self:stretch}}
+</style></head><body>
+<header><div class="brand"><span class="logo">🍽</span><div><h1>SmartComanda <small>PRO</small></h1><small>Restaurante &amp; Café Central</small></div></div><nav id="tabs"></nav><div id="hr"></div></header>
+<main><section id="v-salao"><div id="mesas"></div><aside id="painel"></aside></section><section id="v-kitchen" hidden></section><section id="v-menu" hidden></section></main>
+<dialog id="mNew"><h3>Abrir nova comanda</h3><label>Número da mesa<input id="nNum" type="number" min="1"></label><label>Cliente ou responsável<input id="nCli" type="text"></label><div class="row"><button data-a="x">Cancelar</button><button class="g" data-a="abrir">Abrir mesa</button></div></dialog>
+<dialog id="mProd"><h3 id="pT"></h3><div id="pL"></div><div class="row"><button class="g" data-a="x">Concluir</button></div></dialog>
+<dialog id="mCfg"><h3>Configurações</h3>
+<label class="ck"><input type="checkbox" id="cSnd">Sons do sistema</label>
+<label class="ck"><input type="checkbox" id="cVoz">Avisos por voz (ex.: “Mesa 5, pedido pronto”)</label>
+<label>Volume<input type="range" id="cVol" min="0" max="1" step=".05"></label>
+<label>Alertar pedido atrasado após (minutos)<input type="number" id="cLate" min="1"></label>
+<div class="row w"><button data-a="sheet">📊 Conectar planilha Excel</button><button data-a="dl">⬇ Baixar planilha agora</button><button data-a="test">🔊 Testar sons</button></div>
+<div class="row w"><button data-a="bk">💾 Backup (JSON)</button><label class="btn" style="margin:0;color:#fff;font-size:14px">Restaurar backup<input type="file" id="cRes" accept=".json" hidden></label></div>
+<div class="row"><button class="g" data-a="x">Fechar</button></div></dialog>
+<div id="toast" role="status"></div>
+<script>
+const KEY='smartcomanda_pro_v1',TURNOS=['Café da Manhã','Almoço','Lanche','Janta'];
+const MENU=[
+{id:1,name:'Café Expresso Duplo',price:8,cat:'Café da Manhã',desc:'Café especial com notas encorpadas.'},
+{id:2,name:'Pão de Queijo Recheado',price:8,cat:'Café da Manhã',desc:'Recheado com requeijão artesanal.'},
+{id:3,name:'Filé à Parmegiana',price:54.9,cat:'Almoço',desc:'Acompanha arroz branco e fritas crocantes.'},
+{id:4,name:'Picanha na Chapa (2P)',price:110,cat:'Almoço',desc:'Acompanha vinagrete, farofa e mandioca.'},
+{id:5,name:'Misto Quente na Chapa',price:12,cat:'Lanche',desc:'Pão caseiro, presunto e queijo prato derretido.'},
+{id:6,name:'Pizza Margherita (Média)',price:45,cat:'Janta',desc:'Molho de tomate artesanal, mozarela e manjericão.'},
+{id:7,name:'Refrigerante Lata',price:7,cat:'Bebidas',desc:'350ml gelado.'}];
+const def=()=>{const h=new Date().getHours();return{seq:100,turn:h<10?TURNOS[0]:h<15?TURNOS[1]:h<18?TURNOS[2]:TURNOS[3],
+tables:[1,2,3,4,5,6].map(n=>({number:n,status:'livre',client:'',items:[]})),orders:[],closed:[],cfg:{snd:1,voz:1,vol:.7,late:15}}};
+let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.tables)S=def();S.cfg={...def().cfg,...S.cfg};
+let tab='salao',sel=null,sheet='none',fh=null,wt;
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const R=n=>'R$ '+n.toFixed(2).replace('.',','),tot=t=>t.items.reduce((a,i)=>a+i.qty*i.price,0);
+const isLive=o=>o.status==='Pendente'||o.status==='Em Preparo',cur=()=>S.tables.find(t=>t.number===sel),inT=p=>p.cat===S.turn||p.cat==='Bebidas';
+const fmt=ms=>{const s=Math.max(0,Math.floor(ms/1000)),h=s/3600|0;return(h?h+':':'')+String(s%3600/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const el=o=>(o.readyAt||Date.now())-o.sentAt,hm=ms=>new Date(ms).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+const cls=o=>{const d=el(o),L=S.cfg.late*6e4;return o.status==='Pronto'?'ok':d>L?'bad':d>L/2?'wn':'ok'};
+const tm=o=>`<b class="tm ${cls(o)}" data-o="${o.id}">${fmt(el(o))}</b>`;
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',3200)}
+/* ---------- salvar (localStorage + planilha) ---------- */
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Atenção: não foi possível salvar. Faça um backup.')}clearTimeout(wt);if(sheet==='ok'||sheet==='busy')wt=setTimeout(push,700)}
+/* ---------- áudio (Web Audio, sem arquivos) ---------- */
+let ac;const AC=()=>ac||(ac=new(window.AudioContext||window.webkitAudioContext)());
+function note(f,t,d,ty='sine',g=.25){const a=AC(),o=a.createOscillator(),n=a.createGain(),s=a.currentTime+t;o.type=ty;o.frequency.value=f;n.gain.setValueAtTime(0,s);n.gain.linearRampToValueAtTime(g*S.cfg.vol,s+.01);n.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(n).connect(a.destination);o.start(s);o.stop(s+d+.05)}
+const SND={add:()=>note(880,0,.07),open:()=>{note(660,0,.1);note(880,.09,.15)},send:()=>{note(784,0,.25);note(1175,.18,.5)},start:()=>{note(523,0,.12);note(659,.1,.18)},
+ready:()=>[523,659,784,1046].forEach((f,i)=>note(f,i*.12,.3,'triangle')),cash:()=>{note(1568,0,.1,'square',.12);note(2093,.09,.5,'triangle')},
+late:()=>{for(let i=0;i<3;i++)note(740,i*.25,.18,'square',.18)},err:()=>note(180,0,.3,'sawtooth',.2)};
+function play(k,say){if(S.cfg.snd)try{SND[k]()}catch(e){}if(say&&S.cfg.voz&&window.speechSynthesis){const u=new SpeechSynthesisUtterance(say);u.lang='pt-BR';u.volume=S.cfg.vol;speechSynthesis.speak(u)}}
+/* ---------- planilha .xlsx (gerada aqui, sem bibliotecas) ---------- */
+const X=s=>String(s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+const sv=ms=>ms?(ms-new Date(ms).getTimezoneOffset()*6e4)/864e5+25569:0,D=ms=>ms?{s:2,v:sv(ms)}:'';
+function cell(c,x,y){if(c===''||c==null)return'';const r=String.fromCharCode(65+x)+(y+1);
+if(typeof c==='object')return`<c r="${r}" s="${c.s}">${c.f?`<f>${X(c.f)}</f>`:''}<v>${c.v}</v></c>`;
+if(typeof c==='number')return`<c r="${r}"><v>${c}</v></c>`;return`<c r="${r}" s="${y?0:1}" t="inlineStr"><is><t>${X(c)}</t></is></c>`}
+const sheetXml=rows=>'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols><col min="1" max="9" width="22" customWidth="1"/></cols><sheetData>'+rows.map((r,y)=>`<row r="${y+1}">${r.map((c,x)=>cell(c,x,y)).join('')}</row>`).join('')+'</sheetData></worksheet>';
+const crcT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc=b=>{let c=-1;for(const x of b)c=crcT[(c^x)&255]^(c>>>8);return(c^-1)>>>0};
+function zip(files){const e=new TextEncoder(),parts=[],cd=[];let off=0;
+for(const[n,s]of files){const nb=e.encode(n),d=e.encode(s),c=crc(d),h=new DataView(new ArrayBuffer(30)),g=new DataView(new ArrayBuffer(46));
+h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x800,true);h.setUint16(12,0x21,true);h.setUint32(14,c,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,nb.length,true);
+g.setUint32(0,0x02014b50,true);g.setUint16(4,20,true);g.setUint16(6,20,true);g.setUint16(8,0x800,true);g.setUint16(14,0x21,true);g.setUint32(16,c,true);g.setUint32(20,d.length,true);g.setUint32(24,d.length,true);g.setUint16(28,nb.length,true);g.setUint32(42,off,true);
+parts.push(new Uint8Array(h.buffer),nb,d);cd.push(new Uint8Array(g.buffer),nb);off+=30+nb.length+d.length}
+const cs=cd.reduce((a,p)=>a+p.length,0),z=new DataView(new ArrayBuffer(22));z.setUint32(0,0x06054b50,true);z.setUint16(8,files.length,true);z.setUint16(10,files.length,true);z.setUint32(12,cs,true);z.setUint32(16,off,true);
+return new Blob([...parts,...cd,new Uint8Array(z.buffer)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+function buildXlsx(){const now=Date.now(),P=[['Pedido','Mesa','Cliente','Itens','Status','Enviado à cozinha','Início do preparo','Pronto em','Tempo total']];
+S.orders.forEach((o,i)=>{const r=i+2;P.push([o.id,o.table,o.client,o.items.map(x=>x.qty+'x '+x.name).join('; '),o.status,D(o.sentAt),D(o.startAt),D(o.readyAt),{s:3,f:`IF(H${r}<>"",H${r},NOW())-F${r}`,v:((o.readyAt||now)-o.sentAt)/864e5}])});
+const I=[['Pedido','Mesa','Produto','Qtd','Preço unit.','Subtotal','Status']];
+S.tables.forEach(t=>t.items.forEach(it=>{const r=I.length+1;I.push([it.orderId||'não enviado',t.number,it.name,it.qty,{s:4,v:it.price},{s:4,f:`D${r}*E${r}`,v:it.qty*it.price},it.status==='Rascunho'?'Não enviado':it.status])}));
+const M=[['Mesa','Cliente','Situação','Itens','Total']];
+S.tables.forEach(t=>M.push([t.number,t.client,t.status==='livre'?'Livre':S.orders.some(o=>o.table===t.number&&isLive(o))?'Aguardando cozinha':'Ocupada',t.items.map(i=>i.qty+'x '+i.name).join('; '),{s:4,v:tot(t)}]));
+const F=[['Fechada em','Mesa','Cliente','Itens','Total']];S.closed.forEach(c=>F.push([D(c.at),c.table,c.client,c.items,{s:4,v:c.total}]));
+const N=['Pedidos','Itens','Mesas','Fechamentos'],ns='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',H='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',RL='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+return zip([
+['[Content_Types].xml',H+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'+N.map((_,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')+'</Types>'],
+['_rels/.rels',H+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${RL}/officeDocument" Target="xl/workbook.xml"/></Relationships>`],
+['xl/workbook.xml',H+`<workbook ${ns} xmlns:r="${RL}"><sheets>`+N.map((n,i)=>`<sheet name="${n}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')+'</sheets><calcPr fullCalcOnLoad="1"/></workbook>'],
+['xl/_rels/workbook.xml.rels',H+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+N.map((_,i)=>`<Relationship Id="rId${i+1}" Type="${RL}/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')+`<Relationship Id="rId9" Type="${RL}/styles" Target="styles.xml"/></Relationships>`],
+['xl/styles.xml',H+`<styleSheet ${ns}><numFmts count="3"><numFmt numFmtId="164" formatCode="dd/mm/yyyy\\ hh:mm:ss"/><numFmt numFmtId="165" formatCode="[h]:mm:ss"/><numFmt numFmtId="166" formatCode="&quot;R$&quot;\\ #,##0.00"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFD1FAE5"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="166" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`],
+...[P,I,M,F].map((r,i)=>[`xl/worksheets/sheet${i+1}.xml`,sheetXml(r)])])}
+const idb=(m,k,v)=>new Promise((ok,no)=>{const q=indexedDB.open('smartcomanda',1);q.onupgradeneeded=()=>q.result.createObjectStore('h');q.onsuccess=()=>{const st=q.result.transaction('h',m==='get'?'readonly':'readwrite').objectStore('h'),r=m==='get'?st.get(k):st.put(v,k);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)};q.onerror=()=>no(q.error)});
+async function push(){clearTimeout(wt);try{const w=await fh.createWritable();await w.write(buildXlsx());await w.close();sheet='ok'}catch(e){sheet='busy';wt=setTimeout(push,5000)}hdr()}
+async function initSheet(){if(!window.showSaveFilePicker){sheet='unsupported';return hdr()}
+try{fh=await idb('get','fh');if(fh){if(await fh.queryPermission({mode:'readwrite'})==='granted'){sheet='ok';push()}else sheet='reauth'}}catch(e){}hdr()}
+async function connect(){try{if(fh&&sheet==='reauth'){if(await fh.requestPermission({mode:'readwrite'})!=='granted')return}
+else{fh=await showSaveFilePicker({suggestedName:'SmartComanda.xlsx',types:[{description:'Planilha Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}]});await idb('put','fh',fh)}
+sheet='ok';await push();toast('Planilha conectada. Ela será atualizada a cada alteração.')}catch(e){if(e.name!=='AbortError')toast('Não foi possível conectar a planilha. Use "Baixar planilha agora".')}}
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4e3)}
+/* ---------- telas ---------- */
+const SC={Rascunho:'',Pendente:'wn','Em Preparo':'bl',Pronto:'ok'};
+function hdr(){const n=S.orders.filter(isLive).length,on=navigator.onLine;
+$('#tabs').innerHTML=[['salao','🪑 Salão / Comandas'],['kitchen','🔥 Cozinha (KDS)'],['menu','📖 Cardápio & Turnos']].map(([k,l])=>`<button class="tab ${tab===k?'on '+k:''}" data-a="tab" data-v="${k}">${l}${k==='kitchen'&&n?`<i class="bdg">${n}</i>`:''}</button>`).join('');
+const sh={ok:'<span class="chip ok">📊 Planilha sincronizada</span>',busy:'<span class="chip wn">📊 Planilha em uso: feche-a no Excel</span>',unsupported:'<span class="chip">📊 Planilha automática: use Chrome ou Edge</span>',reauth:'<button class="chip wn" data-a="sheet">📊 Reconectar planilha</button>'}[sheet]||'<button class="chip" data-a="sheet">📊 Conectar planilha</button>';
+$('#hr').innerHTML=`<span class="chip ${on?'ok':'wn'}">${on?'● Online':'● Offline: tudo salvo neste computador'}</span>${sh}<button class="ic" data-a="snd" title="Som ligado/desligado">${S.cfg.snd?'🔊':'🔇'}</button><button class="ic" data-a="cfg" title="Configurações">⚙</button><span class="turn">Turno <b>${S.turn}</b></span><button class="g" data-a="novo">+ Nova comanda</button>`}
+function card(t){const l=S.orders.filter(o=>o.table===t.number&&isLive(o)),st=t.status==='livre'?'livre':l.length?'coz':'ocu';
+return`<button class="mesa ${st}${t.number===sel?' sel':''}" data-a="sel" data-v="${t.number}"><b>Mesa ${t.number}</b><span>${t.status==='livre'?'Livre':esc(t.client)}</span>${l.length?tm(l[0]):''}${t.items.length?`<strong>${R(tot(t))}</strong>`:''}</button>`}
+function salon(){$('#mesas').innerHTML=`<div class="top"><h2>Mesas e comandas abertas</h2><div class="lg"><span><i class="dot" style="background:var(--g)"></i>Livre</span><span><i class="dot" style="background:var(--a)"></i>Ocupada</span><span><i class="dot" style="background:var(--i)"></i>Aguardando cozinha</span></div></div><div class="grid">${S.tables.map(card).join('')}</div>`;panel()}
+function panel(){const t=cur(),p=$('#painel');if(!t){p.innerHTML='<div class="empty">👆<p>Selecione uma mesa para gerenciar a comanda.</p></div>';return}
+const dr=t.items.filter(i=>i.status==='Rascunho').length;
+p.innerHTML=`<div class="ph"><div><h3>Mesa ${t.number}</h3><small>${esc(t.client)}</small></div><button class="ic" data-a="close" title="Fechar painel">✕</button></div><div class="its">${t.items.length?t.items.map(i=>`<div class="it"><div><b>${i.name}</b><small>${i.qty} × ${R(i.price)}</small></div><div class="r"><b>${R(i.qty*i.price)}</b><span class="chip ${SC[i.status]}">${i.status==='Rascunho'?'Não enviado':i.status}${i.status==='Rascunho'?` <button class="x" data-a="del" data-v="${i.id}" title="Remover">✕</button>`:''}</span></div></div>`).join(''):'<div class="empty">🧾<p>Nenhum item lançado ainda.</p></div>'}</div>
+<div class="ft"><div class="tt"><span>Total parcial</span><span>${R(tot(t))}</span></div><button data-a="addm">🛒 Adicionar produtos</button><button class="${dr?'bl':''}" data-a="send"${dr?'':' disabled style="opacity:.45;cursor:default"'}>🔥 Enviar para a cozinha${dr?` (${dr})`:''}</button><button class="g" data-a="pay">💵 Fechar conta / pagamento</button></div>`}
+function kds(){const n=Date.now(),L=S.orders.filter(isLive),Rd=S.orders.filter(o=>o.status==='Pronto'&&n-o.readyAt<9e5).reverse();
+$('#v-kitchen').innerHTML=`<div class="top"><div><h2>🔥 Monitor de pedidos da cozinha</h2><small>O cronômetro corre desde o envio à cozinha. Avance o status a cada etapa.</small></div><span class="chip">Na fila: <b>${L.length}</b></span></div><div class="kg">${[...L,...Rd].map(o=>`<article class="k${o.status==='Pronto'?' done':''}"><i class="bar ${o.status==='Em Preparo'?'e':o.status==='Pronto'?'p':''}"></i><div class="kt"><b class="mt">Mesa ${o.table}</b>${tm(o)}</div><small>Cliente: ${esc(o.client)}</small><small>Pedido nº ${o.id}, enviado às ${hm(o.sentAt)}</small><ul>${o.items.map(i=>`<li>${i.qty}× ${i.name}</li>`).join('')}</ul>${o.status==='Pendente'?`<button class="bl" data-a="ini" data-v="${o.id}">Iniciar preparo</button>`:o.status==='Em Preparo'?`<button class="g" data-a="pro" data-v="${o.id}">✓ Marcar como pronto</button>`:`<div class="fin">✓ Pronto em ${fmt(el(o))}</div>`}</article>`).join('')||'<div class="empty">Nenhum pedido na fila.</div>'}</div>`}
+function menuV(){$('#v-menu').innerHTML=`<div class="top"><div><h2>📖 Cardápio por turnos</h2><small>Mostra os produtos do turno escolhido e as bebidas.</small></div><div class="seg">${TURNOS.map(t=>`<button class="${S.turn===t?'on':''}" data-a="turn" data-v="${t}">${t}</button>`).join('')}</div></div><div class="grid">${MENU.filter(inT).map(p=>`<div class="pc"><div class="r2"><span class="chip">${p.cat}</span><b class="pr">${R(p.price)}</b></div><h4>${p.name}</h4><small>${p.desc}</small></div>`).join('')}</div>`}
+function plist(){const t=cur();if(!t)return;$('#pT').textContent='Adicionar produtos: Mesa '+t.number;
+$('#pL').innerHTML=[...MENU].sort((a,b)=>inT(b)-inT(a)).map(p=>{const q=t.items.filter(i=>i.name===p.name&&i.status==='Rascunho').reduce((a,i)=>a+i.qty,0);return`<div class="it"><div><b>${p.name}</b><small>${p.cat}: ${R(p.price)}</small></div><button class="g" data-a="add" data-v="${p.id}">+ Adicionar${q?` (${q})`:''}</button></div>`}).join('')}
+function render(){hdr();['salao','kitchen','menu'].forEach(k=>$('#v-'+k).hidden=tab!==k);({salao:salon,kitchen:kds,menu:menuV})[tab]()}
+/* ---------- ações ---------- */
+function st(id,ns){const o=S.orders.find(x=>x.id==id);if(!o)return;o.status=ns;if(ns==='Em Preparo')o.startAt=Date.now();else o.readyAt=Date.now();
+S.tables.forEach(t=>t.items.forEach(i=>{if(i.orderId===o.id)i.status=ns}));save();render();ns==='Pronto'?play('ready','Mesa '+o.table+', pedido pronto'):play('start')}
+const A={
+tab:v=>{tab=v;render()},turn:v=>{S.turn=v;save();render()},sel:v=>{sel=+v;render()},close:()=>{sel=null;render()},
+novo:()=>{$('#nNum').value='';$('#nCli').value='';$('#mNew').showModal();$('#nNum').focus()},
+abrir:()=>{const n=+$('#nNum').value,c=$('#nCli').value.trim();if(!n||!c){play('err');return toast('Preencha o número da mesa e o nome do cliente.')}
+let t=S.tables.find(x=>x.number===n);if(t&&t.status!=='livre'){play('err');return toast('A mesa '+n+' já está ocupada.')}
+if(!t){t={number:n,status:'livre',client:'',items:[]};S.tables.push(t);S.tables.sort((a,b)=>a.number-b.number)}
+t.status='ocupada';t.client=c;t.items=[];sel=n;save();$('#mNew').close();tab='salao';render();play('open')},
+addm:()=>{if(cur()){plist();$('#mProd').showModal()}},
+add:v=>{const t=cur(),p=MENU.find(x=>x.id==v),i=t.items.find(x=>x.name===p.name&&x.status==='Rascunho');
+if(i)i.qty++;else t.items.push({id:''+Date.now()+Math.random(),name:p.name,qty:1,price:p.price,status:'Rascunho'});t.status='ocupada';save();play('add');render();plist()},
+del:v=>{const t=cur();t.items=t.items.filter(i=>i.id!==v);save();render()},
+send:()=>{const t=cur(),dr=t.items.filter(i=>i.status==='Rascunho');if(!dr.length)return play('err');
+const o={id:++S.seq,table:t.number,client:t.client,sentAt:Date.now(),startAt:0,readyAt:0,status:'Pendente',items:dr.map(i=>({qty:i.qty,name:i.name}))};
+dr.forEach(i=>{i.status='Pendente';i.orderId=o.id});S.orders.push(o);save();render();play('send');toast('Pedido nº '+o.id+' enviado. Cronômetro iniciado.')},
+pay:()=>{const t=cur(),lv=S.orders.some(o=>o.table===t.number&&isLive(o));
+if(!confirm(`Fechar a conta da Mesa ${t.number}: ${R(tot(t))}?`+(t.items.some(i=>i.status==='Rascunho')?'\n\nHá itens NÃO enviados à cozinha.':'')+(lv?'\n\nHá pedidos ainda na cozinha.':'')))return;
+S.orders.forEach(o=>{if(o.table===t.number&&isLive(o))o.status='Encerrado'});
+if(t.items.length)S.closed.push({at:Date.now(),table:t.number,client:t.client,items:t.items.map(i=>i.qty+'x '+i.name).join('; '),total:tot(t)});
+t.status='livre';t.client='';t.items=[];sel=null;save();render();play('cash');toast('Pagamento registrado. Mesa liberada.')},
+ini:v=>st(v,'Em Preparo'),pro:v=>st(v,'Pronto'),x:(v,b)=>b.closest('dialog').close(),
+snd:()=>{S.cfg.snd=+!S.cfg.snd;save();hdr()},
+cfg:()=>{$('#cSnd').checked=!!S.cfg.snd;$('#cVoz').checked=!!S.cfg.voz;$('#cVol').value=S.cfg.vol;$('#cLate').value=S.cfg.late;$('#mCfg').showModal()},
+sheet:()=>connect(),dl:()=>download(buildXlsx(),'SmartComanda.xlsx'),test:()=>{play('send');setTimeout(()=>play('ready','Mesa 5, pedido pronto'),900)},
+bk:()=>download(new Blob([JSON.stringify(S)],{type:'application/json'}),'backup-smartcomanda-'+new Date().toISOString().slice(0,10)+'.json')};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a]&&!b.disabled){try{AC().resume()}catch(_){}A[b.dataset.a](b.dataset.v,b)}});
+$('#nCli').addEventListener('keydown',e=>{if(e.key==='Enter')A.abrir()});
+document.addEventListener('change',e=>{const i=e.target.id;if(i==='cSnd')S.cfg.snd=+e.target.checked;else if(i==='cVoz')S.cfg.voz=+e.target.checked;else if(i==='cVol')S.cfg.vol=+e.target.value;else if(i==='cLate')S.cfg.late=Math.max(1,+e.target.value||15);
+else if(i==='cRes'){const f=e.target.files[0];if(!f)return;f.text().then(x=>{const n=JSON.parse(x);if(!n.tables||!n.orders)throw 0;S=n;save();render();toast('Backup restaurado.')}).catch(()=>toast('Arquivo de backup inválido.'));return}else return;save();hdr()});
+/* ---------- sincronia entre abas, relógio e atrasos ---------- */
+addEventListener('storage',e=>{if(e.key!==KEY||!e.newValue)return;const m=new Map(S.orders.map(o=>[o.id,o.status]));S=JSON.parse(e.newValue);
+S.orders.forEach(o=>{const p=m.get(o.id);if(!p)play('send','Novo pedido, mesa '+o.table);else if(p!==o.status&&o.status==='Pronto')play('ready','Mesa '+o.table+', pedido pronto')});render()});
+addEventListener('online',hdr);addEventListener('offline',hdr);
+let tk=0;setInterval(()=>{const n=Date.now(),L=S.cfg.late*6e4;tk++;
+document.querySelectorAll('.tm').forEach(e=>{const o=S.orders.find(x=>x.id==e.dataset.o);if(o){e.className='tm '+cls(o);e.textContent=fmt(el(o))}});
+if(tab==='kitchen'){S.orders.forEach(o=>{if(isLive(o)&&!o.alerted&&n-o.sentAt>L){o.alerted=1;save();play('late','Atenção, pedido da mesa '+o.table+' atrasado')}});if(tk%30===0)kds()}},1000);
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+save();render();initSheet();
+</script></body></html>

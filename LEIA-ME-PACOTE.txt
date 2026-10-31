@@ -1,0 +1,12 @@
+SmartComanda - pacote do projeto
+
+Raiz (sistema com Firebase, v7):
+  index.html              Painel da loja (PC)
+  comanda_cliente.html    App do cliente (celular, via QR)
+  firebase-rules.json     Regras de seguranca do banco
+  LEIA-ME-SEGURANCA.md    Ativacao do login e das regras (siga a ordem!)
+  LGPD-CONFORMIDADE.md    Guia de LGPD
+
+PRO-offline/ (versao independente, funciona sem internet):
+  sistema_comanda.html    Comandas + cozinha (KDS) com cronometro, audio e planilha Excel
+  LEIA-ME.txt             Como usar
